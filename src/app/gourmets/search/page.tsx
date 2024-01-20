@@ -1,22 +1,19 @@
 "use client";
-import { useFetchGourmets } from "@/hooks/domain/useFetchGourmets";
+import { trpc } from "@/utils/trpc";
 import { useEffect } from "react";
 import { useGeolocation } from "react-use";
 const Search = () => {
-  const query = {
-    lat: 35.0714438263,
-    lng: 135.7121833807,
-    range: 5,
-  };
-
-  const { data, error } = useFetchGourmets(query);
-
-  const { loading, longitude, latitude, error: geoError } = useGeolocation();
+  const gourmets = trpc.listGourmet.useQuery({
+    lat: 35.6811673,
+    lng: 139.7670516,
+    range: 3,
+  });
 
   useEffect(() => {
-    console.log({ loading, longitude, latitude, geoError });
-  }, [loading, longitude, latitude, geoError]);
+    console.log(gourmets.data);
+  }, [gourmets.data]);
 
+  useEffect;
   return <main>hello world </main>;
 };
 
