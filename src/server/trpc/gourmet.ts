@@ -7,6 +7,7 @@ const listGourmetInput = z.object({
   lng: z.number(),
   range: z.number(),
 });
+
 const listGourmet = publicProcedure
   .input(listGourmetInput)
   .query(async (opts) => {
