@@ -1,11 +1,10 @@
 "use client";
 import { trpc } from "@/utils/trpc";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useGeolocation } from "react-use";
 import { SearchForm } from "./SearchForm";
 import { Box, Divider, VStack } from "@chakra-ui/react";
 import { GourmetCard } from "./GourmetCard";
-import { Header } from "@/components/ui/Header";
 const Search = () => {
   const geo = useGeolocation();
 
@@ -25,35 +24,25 @@ const Search = () => {
     range: 3,
   });
 
-  useEffect(() => {
-    console.log(gourmets);
-  }, [gourmets]);
-
-  useEffect(() => {
-    console.log(geo);
-  }, [geo]);
-
   return (
-    <>
-      <Box as="main" p={4}>
-        <SearchForm />
-        <Divider my={4} />
-        <VStack>
-          {gourmets?.map((gourmet) => (
-            <GourmetCard
-              key={gourmet.id}
-              name={gourmet.name}
-              url={gourmet.urls.pc}
-              photoUrl={gourmet.photo.pc.l}
-              address={gourmet.address}
-              genre={gourmet.genre}
-              lat={gourmet.lat}
-              lng={gourmet.lng}
-            />
-          ))}
-        </VStack>
-      </Box>
-    </>
+    <Box as="main" p={4}>
+      <SearchForm />
+      <Divider my={4} />
+      <VStack>
+        {gourmets?.map((gourmet) => (
+          <GourmetCard
+            key={gourmet.id}
+            name={gourmet.name}
+            url={gourmet.urls.pc}
+            photoUrl={gourmet.photo.pc.l}
+            address={gourmet.address}
+            genre={gourmet.genre}
+            lat={gourmet.lat}
+            lng={gourmet.lng}
+          />
+        ))}
+      </VStack>
+    </Box>
   );
 };
 

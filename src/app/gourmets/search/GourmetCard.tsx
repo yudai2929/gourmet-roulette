@@ -1,3 +1,4 @@
+import { generateMapUrl } from "@/utils/generateMapUrl";
 import { VStack, Text, Image, Divider, Box, HStack } from "@chakra-ui/react";
 import React from "react";
 import { FiMapPin } from "react-icons/fi";
@@ -15,10 +16,23 @@ type Props = {
   lng: number;
 };
 
-// TODO: ホットペッパーのURLを開く。GoogleMapを開く。
 export const GourmetCard = (props: Props) => {
+  const handleClickDetail = () => {
+    window.open(props.url, "_blank");
+  };
+  const handleClickMap = () => {
+    window.open(generateMapUrl(props.lat, props.lng), "_blank");
+  };
+
   return (
-    <VStack alignItems={"left"} borderWidth={1} p={2} w={"full"} shadow={"md"}>
+    <VStack
+      alignItems={"left"}
+      borderWidth={1}
+      p={2}
+      w={"full"}
+      shadow={"md"}
+      borderRadius={"md"}
+    >
       <Box>
         <HStack
           justifyContent={"space-between"}
@@ -38,15 +52,21 @@ export const GourmetCard = (props: Props) => {
 
       <Box>
         <Text fontSize={"sm"}>{props.address}</Text>
-        <HStack spacing={1} color={"blue.500"} fontSize={"sm"}>
+        <HStack
+          spacing={1}
+          color={"blue.500"}
+          fontSize={"sm"}
+          as="button"
+          onClick={handleClickMap}
+        >
           <FiMapPin />
-          <Text>地図で見る</Text>
+          <Text>マップで見る</Text>
         </HStack>
       </Box>
 
       <Divider />
 
-      <VStack>
+      <VStack as="button" w={"full"} onClick={handleClickDetail}>
         <Text fontSize={"sm"} color={"blue.500"} fontWeight={"bold"}>
           ホットペッペーで詳しく見る
         </Text>

@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import { useIsSP } from "@/hooks/helper/mediaQuery";
-import { Header } from "@/components/ui/Header";
+import { Header } from "@/components/ui/Header/Header";
 
 const TrpcProvider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
