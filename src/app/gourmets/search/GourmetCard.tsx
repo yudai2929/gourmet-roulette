@@ -14,6 +14,9 @@ type Props = {
   };
   lat: number;
   lng: number;
+  isActive: boolean;
+  onClickAdd: () => void;
+  onClickRemove: () => void;
 };
 
 export const GourmetCard = (props: Props) => {
@@ -24,13 +27,20 @@ export const GourmetCard = (props: Props) => {
     window.open(generateMapUrl(props.lat, props.lng), "_blank");
   };
 
+  const handleClickAction = () => {
+    if (props.isActive) {
+      props.onClickRemove();
+    } else {
+      props.onClickAdd();
+    }
+  };
+
   return (
     <VStack
       alignItems={"left"}
       borderWidth={1}
       p={2}
       w={"full"}
-      shadow={"md"}
       borderRadius={"md"}
     >
       <Box>
@@ -40,7 +50,11 @@ export const GourmetCard = (props: Props) => {
           alignItems={"start"}
         >
           <Text fontWeight={"bold"}>{props.name}</Text>
-          <IoMdAddCircleOutline size={24} />
+          <IoMdAddCircleOutline
+            size={24}
+            onClick={handleClickAction}
+            color={props.isActive ? "#3182ce" : "gray"}
+          />
         </HStack>
 
         <Text fontSize={"sm"} color={"gray"}>

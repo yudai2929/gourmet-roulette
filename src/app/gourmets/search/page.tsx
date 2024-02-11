@@ -1,22 +1,13 @@
 "use client";
 import { trpc } from "@/utils/trpc";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useGeolocation } from "react-use";
 import { SearchForm } from "./SearchForm";
-import { Box, Divider, VStack } from "@chakra-ui/react";
+import { Box, Divider, VStack, Text } from "@chakra-ui/react";
 import { GourmetCard } from "./GourmetCard";
+import { useRouletteShop } from "@/hooks/domain/rouletteShot/hooks";
 const Search = () => {
   const geo = useGeolocation();
-
-  const grommetParams = useMemo(() => {
-    if (geo.latitude && geo.longitude) {
-      return {
-        lat: geo.latitude,
-        lng: geo.longitude,
-        range: 3,
-      };
-    }
-  }, [geo.latitude, geo.longitude]);
 
   const { data: gourmets } = trpc.listGourmet.useQuery({
     lat: 35.6811673,
@@ -24,10 +15,35 @@ const Search = () => {
     range: 3,
   });
 
+  const { value, getRouletteShopById, addRouletteShop, deleteRouletteShop } =
+    useRouletteShop();
+
+  const handleClickAdd = (shopId: string) => {
+    const shop = gourmets?.find((g) => g.id === shopId);
+    if (!shop) {
+      return;
+    }
+    addRouletteShop({ ...shop, logoImage: shop.photo.pc.l });
+  };
+
+  const handleClickRemove = (shopId: string) => {
+    deleteRouletteShop(shopId);
+  };
+
+  const isActive = useCallback(
+    (shopId: string) => {
+      return value.some((v) => v.id === shopId);
+    },
+    [value]
+  );
+
   return (
     <Box as="main" p={4}>
       <SearchForm />
       <Divider my={4} />
+      <Box pb={2}>
+        <Text fontWeight={"bold"}>検索結果：{gourmets?.length}</Text>
+      </Box>
       <VStack>
         {gourmets?.map((gourmet) => (
           <GourmetCard
@@ -39,6 +55,9 @@ const Search = () => {
             genre={gourmet.genre}
             lat={gourmet.lat}
             lng={gourmet.lng}
+            onClickAdd={() => handleClickAdd(gourmet.id)}
+            onClickRemove={() => handleClickRemove(gourmet.id)}
+            isActive={isActive(gourmet.id)}
           />
         ))}
       </VStack>
